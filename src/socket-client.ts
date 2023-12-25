@@ -15,6 +15,9 @@ const addListerners = (socket: Socket) => {
     const serverStatusLabel = document.querySelector('#server-status')!
     const clientsUl = document.querySelector('#clients-ul')!
 
+    const messageForm = document.querySelector<HTMLFormElement>('#messageForm')! 
+    const messageInput = document.querySelector<HTMLInputElement>('#messageInput')! 
+
     socket.on('connect', () => {
         serverStatusLabel.innerHTML = 'connected'
     })
@@ -32,4 +35,15 @@ const addListerners = (socket: Socket) => {
         })
         clientsUl.innerHTML = clientsHtml
     })
+
+    messageForm.addEventListener('submit', (event) => {
+        event.preventDefault()
+        if(messageInput.value.trim.length <= 0) return
+
+        socket.emit('message-from-client', messageInput.value)
+
+        messageInput.value = ''
+    })
+
+
 }
